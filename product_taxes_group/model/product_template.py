@@ -85,16 +85,15 @@ class ProductTemplate(models.Model):
                 'taxes_id': [[6, 0, [
                     x.id for x in self.tax_group_id.customer_tax_ids]]],
                 }
-            self.sudo().write(tax_vals)
+            super(ProductTemplate, self.sudo()).write(tax_vals)
         elif 'supplier_taxes_id' in vals.keys() or 'taxes_id' in vals.keys():
             # product template Single update mode
             tg_obj = self.env['tax.group']
             if len(self) != 1:
                 raise ValidationError(
                     _("You cannot change Taxes for many Products."))
-            tmpl = self.sudo().browse()
             supplier_tax_ids = [x.id for x in tmpl.supplier_taxes_id]
             customer_tax_ids = [x.id for x in tmpl.taxes_id]
             tg_id = tg_obj.find_or_create(
                 [self.company_id.id, customer_tax_ids, supplier_tax_ids])
-            tmpl.write({'tax_group_id': tg_id})
+            super(ProductTemplate, tmpl.sudo()).write({'tax_group_id': tg_id})
