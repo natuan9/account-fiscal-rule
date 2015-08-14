@@ -92,8 +92,8 @@ class ProductTemplate(models.Model):
             if len(self) != 1:
                 raise ValidationError(
                     _("You cannot change Taxes for many Products."))
-            supplier_tax_ids = [x.id for x in tmpl.supplier_taxes_id]
-            customer_tax_ids = [x.id for x in tmpl.taxes_id]
+            supplier_tax_ids = [x.id for x in self.sudo().supplier_taxes_id]
+            customer_tax_ids = [x.id for x in self.sudo().taxes_id]
             tg_id = tg_obj.find_or_create(
                 [self.company_id.id, customer_tax_ids, supplier_tax_ids])
-            super(ProductTemplate, tmpl.sudo()).write({'tax_group_id': tg_id})
+            super(ProductTemplate, self.sudo()).write({'tax_group_id': tg_id})
