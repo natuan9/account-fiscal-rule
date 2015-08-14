@@ -77,14 +77,12 @@ class TaxGroup(models.Model):
     supplier_tax_ids = fields.Many2many(
         'account.tax', 'product_supplier_tax_rel',
         'group_id', 'tax_id', string='Supplier Taxes', domain="""[
-            ('company_id', '=', company_id),
             ('parent_id', '=', False),
             ('type_tax_use', 'in', ['purchase', 'all'])]""")
 
     customer_tax_ids = fields.Many2many(
         'account.tax', 'product_customer_tax_rel',
         'group_id', 'tax_id', string='Customer Taxes', domain="""[
-            ('company_id', '=', company_id),
             ('parent_id', '=', False),
             ('type_tax_use', 'in', ['sale', 'all'])]""")
 
