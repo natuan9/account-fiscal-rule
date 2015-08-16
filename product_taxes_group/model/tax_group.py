@@ -120,9 +120,13 @@ class TaxGroup(models.Model):
             ('active', '=', True)
             ])
         for tg in tgs:
-            if (tg.company_id.id == company_id
-                and sorted(tg.customer_tax_ids.ids) == sorted(customer_tax_ids)
-                and sorted(tg.supplier_tax_ids.ids) == supplier_tax_ids):
+            if (
+                    tg.company_id.id == company_id
+                    and sorted(tg.customer_tax_ids.ids) ==
+                    sorted(customer_tax_ids)
+                    and sorted(tg.supplier_tax_ids.ids) ==
+                    sorted(supplier_tax_ids)
+                    ):
                 return tg.id
 
         # create new Taxes Group if not found
@@ -196,11 +200,11 @@ class TaxGroup(models.Model):
                     """create new Taxes Group. Product templates"""
                     """ managed %s/%s""" % (counter, total))
                 tg_id = self.find_or_create(cr, uid, *args)
-                list_res[tg_id] = res
+                list_res[tg_id] = args
                 # associate product template to the new Taxes Group
                 pt_obj.write(cr, uid, [pt.id], {'tax_group_id': tg_id})
             else:
                 # associate product template to existing Taxes Group
                 pt_obj.write(cr, uid, [pt.id], {
                     'tax_group_id': list_res.keys()[
-                        list_res.values().index(res)]})
+                        list_res.values().index(args)]})
