@@ -95,5 +95,5 @@ class ProductTemplate(models.Model):
             supplier_tax_ids = [x.id for x in self.sudo().supplier_taxes_id]
             customer_tax_ids = [x.id for x in self.sudo().taxes_id]
             tg_id = tg_obj.find_or_create(
-                [self.company_id.id, customer_tax_ids, supplier_tax_ids])
+                self.company_id.id, customer_tax_ids, supplier_tax_ids)
             super(ProductTemplate, self.sudo()).write({'tax_group_id': tg_id})
