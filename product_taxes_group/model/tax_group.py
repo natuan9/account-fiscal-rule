@@ -109,7 +109,7 @@ class TaxGroup(models.Model):
         return super(TaxGroup, self).unlink()
 
     # Custom Sections
-    @api.multi
+    @api.model
     def find_or_create(self, company_id, customer_tax_ids, supplier_tax_ids):
         at_obj = self.env['account.tax']
         # Search for existing Taxes Group
