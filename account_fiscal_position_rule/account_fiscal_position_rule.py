@@ -112,7 +112,6 @@ class AccountFiscalPositionRule(models.Model):
 
     def fiscal_position_map(self, **kwargs):
         result = {'fiscal_position': False}
-
         partner_id = kwargs.get('partner_id')
         company_id = kwargs.get('company_id')
         partner_invoice_id = kwargs.get('partner_invoice_id')
@@ -247,7 +246,8 @@ class WizardAccountFiscalPositionRule(models.TransientModel):
                     [('name', '=', fpr_template.fiscal_position_id.name)])
                 if not fp_ids:
                     continue
+            fp_id = fp_ids and fp_ids[0].id
             values = self._template_vals(
-                fpr_template, company_id, fp_ids[0].id)
+                fpr_template, company_id, fp_id)
             self.env['account.fiscal.position.rule'].create(values)
         return True
