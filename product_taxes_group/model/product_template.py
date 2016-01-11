@@ -81,9 +81,9 @@ class ProductTemplate(models.Model):
             # update or replace 'taxes_id' and 'supplier_taxes_id'
             tax_vals = {
                 'supplier_taxes_id': [[6, 0, [
-                    x.id for x in self.tax_group_id.supplier_tax_ids]]],
+                    x.id for x in self.sudo().tax_group_id.supplier_tax_ids]]],
                 'taxes_id': [[6, 0, [
-                    x.id for x in self.tax_group_id.customer_tax_ids]]],
+                    x.id for x in self.sudo().tax_group_id.customer_tax_ids]]],
                 }
             super(ProductTemplate, self.sudo()).write(tax_vals)
         elif 'supplier_taxes_id' in vals.keys() or 'taxes_id' in vals.keys():
