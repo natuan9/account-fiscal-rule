@@ -267,9 +267,10 @@ class wizard_account_fiscal_position_rule(osv.TransientModel):
             if fpr_template.fiscal_position_id:
 
                 fp_ids = obj_fp.search(
-                    cr, uid,
-                    [('name', '=', fpr_template.fiscal_position_id.name)],
-                    context=context)
+                    cr, uid, [
+                    ('name', '=', fpr_template.fiscal_position_id.name),
+                    ('company_id', '=', obj_wizard.company_id.id),
+                    ], context=context)
 
                 if not fp_ids:
                     continue
