@@ -42,23 +42,22 @@ class sale_order(osv.Model):
         fp_rule_obj = self.pool.get('account.fiscal.position.rule')
         return fp_rule_obj.apply_fiscal_mapping(cr, uid, result, **kwargs)
 
-    def onchange_partner_id(self, cr, uid, ids, partner_id, context=None):
+    def onchange_partner_id(self, cr, uid, ids, partner_id, context=None, **kwargs):
 
         if not context:
             context = {}
 
         result = super(sale_order, self).onchange_partner_id(
-            cr, uid, ids, partner_id, context)
+            cr, uid, ids, partner_id, context, **kwargs)
 
-        if context.get('shop_id', False):
+        if not context.get('shop_id', False):
             return result
-
-        kwargs = context.update({
+        kwargs.update({
             'shop_id': context.get('shop_id', False),
             'partner_id': partner_id,
             'partner_invoice_id': result['value'].get('partner_invoice_id', False),
             'partner_shipping_id': result['value'].get('partner_shipping_id', False),
-            'context': context
+            'context': context,
         })
         return self._fiscal_position_map(cr, uid, result, **kwargs)
 
