@@ -72,28 +72,32 @@ class ProductTemplate(models.Model):
         return res
 
     # Custom Section
+    @api.multi
     def check_coherent_vals(self, vals):
         """If tax group is defined, set the according taxes to the product(s);
         Otherwise, find the correct tax group, depending of the taxes, or
         create a new one, if no one are found.
         """
-        if vals.get('tax_group_id', False):
-            # update or replace 'taxes_id' and 'supplier_taxes_id'
-            tax_vals = {
-                'supplier_taxes_id': [[6, 0, [
-                    x.id for x in self.sudo().tax_group_id.supplier_tax_ids]]],
-                'taxes_id': [[6, 0, [
-                    x.id for x in self.sudo().tax_group_id.customer_tax_ids]]],
-                }
-            super(ProductTemplate, self.sudo()).write(tax_vals)
-        elif 'supplier_taxes_id' in vals.keys() or 'taxes_id' in vals.keys():
-            # product template Single update mode
-            tg_obj = self.env['tax.group']
-            if len(self) != 1:
-                raise ValidationError(
-                    _("You cannot change Taxes for many Products."))
-            supplier_tax_ids = [x.id for x in self.sudo().supplier_taxes_id]
-            customer_tax_ids = [x.id for x in self.sudo().taxes_id]
-            tg_id = tg_obj.find_or_create(
-                self.company_id.id, customer_tax_ids, supplier_tax_ids)
-            super(ProductTemplate, self.sudo()).write({'tax_group_id': tg_id})
+        for template in self:
+            if vals.get('tax_group_id', False):
+                # update or replace 'taxes_id' and 'supplier_taxes_id'
+                tax_group = template.sudo().tax_group_id
+                tax_vals = {
+                    'supplier_taxes_id': [[6, 0, [
+                        x.id for x in tax_group.supplier_tax_ids]]],
+                    'taxes_id': [[6, 0, [
+                        x.id for x in tax_group.customer_tax_ids]]],
+                    }
+                super(ProductTemplate, template.sudo()).write(tax_vals)
+            elif ('supplier_taxes_id' in vals.keys() or
+                  'taxes_id' in vals.keys()):
+                # product template Single update mode
+                tg_obj = self.env['tax.group']
+                supplier_tax_ids = [
+                    x.id for x in template.sudo().supplier_taxes_id]
+                customer_tax_ids = [
+                    x.id for x in template.sudo().taxes_id]
+                tg_id = tg_obj.find_or_create(
+                    template.company_id.id, customer_tax_ids, supplier_tax_ids)
+                super(ProductTemplate, template.sudo()).write({
+                    'tax_group_id': tg_id})
