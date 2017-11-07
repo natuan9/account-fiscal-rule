@@ -48,8 +48,10 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def write(self, vals):
+        # TODO it should call recording method only once!
         res = super(ProductTemplate, self).write(vals)
-        self.write_taxes_setting(vals)
+        for pt in self:
+            pt.write_taxes_setting(vals)
         return res
 
     # View Section
@@ -81,7 +83,7 @@ class ProductTemplate(models.Model):
         """If Fiscal Classification is defined, set the according taxes
         to the product(s); Otherwise, find the correct Fiscal classification,
         depending of the taxes, or create a new one, if no one are found."""
-        if vals.get('fiscal_classification_id', False):
+        if vals.get('fiscal_classification_id'):
             # update or replace 'taxes_id' and 'supplier_taxes_id'
             classification = self.fiscal_classification_id
             tax_vals = {
