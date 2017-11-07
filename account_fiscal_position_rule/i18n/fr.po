@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: account-fiscal-rule (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-23 15:24+0000\n"
+"POT-Creation-Date: 2015-11-04 16:27+0000\n"
 "PO-Revision-Date: 2015-09-22 00:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: French (http://www.transifex.com/oca/OCA-account-fiscal-rule-8-0/language/fr/)\n"
@@ -71,27 +71,27 @@ msgstr ""
 #. module: account_fiscal_position_rule
 #: view:wizard.account.fiscal.position.rule:account_fiscal_position_rule.view_wizard_account_fiscal_position_rule
 msgid "Create"
-msgstr ""
+msgstr "Créer"
 
 #. module: account_fiscal_position_rule
 #: field:account.fiscal.position.rule,create_uid:0
 #: field:account.fiscal.position.rule.template,create_uid:0
 #: field:wizard.account.fiscal.position.rule,create_uid:0
 msgid "Created by"
-msgstr ""
+msgstr "Créé par"
 
 #. module: account_fiscal_position_rule
 #: field:account.fiscal.position.rule,create_date:0
 #: field:account.fiscal.position.rule.template,create_date:0
 #: field:wizard.account.fiscal.position.rule,create_date:0
 msgid "Created on"
-msgstr ""
+msgstr "Date"
 
 #. module: account_fiscal_position_rule
 #: field:account.fiscal.position.rule,description:0
 #: field:account.fiscal.position.rule.template,description:0
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #. module: account_fiscal_position_rule
 #: view:account.fiscal.position.rule:account_fiscal_position_rule.view_account_fiscal_position_rule_form
@@ -115,7 +115,7 @@ msgstr ""
 #: field:account.fiscal.position.rule,date_end:0
 #: field:account.fiscal.position.rule.template,date_end:0
 msgid "End Date"
-msgstr ""
+msgstr "Date de fin"
 
 #. module: account_fiscal_position_rule
 #: help:account.fiscal.position.rule,date_end:0
@@ -127,7 +127,7 @@ msgstr ""
 #: field:account.fiscal.position.rule,fiscal_position_id:0
 #: field:account.fiscal.position.rule.template,fiscal_position_id:0
 msgid "Fiscal Position"
-msgstr ""
+msgstr "Position fiscale"
 
 #. module: account_fiscal_position_rule
 #: view:account.fiscal.position.rule:account_fiscal_position_rule.view_account_fiscal_position_rule_form
@@ -165,14 +165,14 @@ msgstr ""
 #: field:account.fiscal.position.rule.template,id:0
 #: field:wizard.account.fiscal.position.rule,id:0
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: account_fiscal_position_rule
 #: view:account.fiscal.position.rule:account_fiscal_position_rule.view_account_fiscal_position_rule_form
 #: view:account.fiscal.position.rule.template:account_fiscal_position_rule.view_account_fiscal_position_rule_template_form
 #: model:ir.model,name:account_fiscal_position_rule.model_account_invoice
 msgid "Invoice"
-msgstr ""
+msgstr "Facture"
 
 #. module: account_fiscal_position_rule
 #: field:account.fiscal.position.rule,to_invoice_country:0
@@ -189,14 +189,14 @@ msgstr ""
 #: field:account.fiscal.position.rule.template,write_uid:0
 #: field:wizard.account.fiscal.position.rule,write_uid:0
 msgid "Last Updated by"
-msgstr ""
+msgstr "Dernière mise à jour par"
 
 #. module: account_fiscal_position_rule
 #: field:account.fiscal.position.rule,write_date:0
 #: field:account.fiscal.position.rule.template,write_date:0
 #: field:wizard.account.fiscal.position.rule,write_date:0
 msgid "Last Updated on"
-msgstr ""
+msgstr "Dernière mise à jour le"
 
 #. module: account_fiscal_position_rule
 #: field:account.fiscal.position.rule,name:0
@@ -208,13 +208,13 @@ msgstr "Nom"
 #: view:account.fiscal.position.rule:account_fiscal_position_rule.view_account_fiscal_position_rule_form
 #: view:account.fiscal.position.rule.template:account_fiscal_position_rule.view_account_fiscal_position_rule_template_form
 msgid "Origin"
-msgstr ""
+msgstr "Origine"
 
 #. module: account_fiscal_position_rule
 #: field:account.fiscal.position.rule,sequence:0
 #: field:account.fiscal.position.rule.template,sequence:0
 msgid "Priority"
-msgstr ""
+msgstr "Priorité"
 
 #. module: account_fiscal_position_rule
 #: view:account.fiscal.position.rule:account_fiscal_position_rule.view_account_fiscal_position_rule_form
@@ -226,7 +226,7 @@ msgstr ""
 #: field:account.fiscal.position.rule,date_start:0
 #: field:account.fiscal.position.rule.template,date_start:0
 msgid "Start Date"
-msgstr ""
+msgstr "Date de démarrage"
 
 #. module: account_fiscal_position_rule
 #: help:account.fiscal.position.rule,date_start:0
