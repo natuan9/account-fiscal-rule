@@ -131,7 +131,7 @@
     </record>
 
     <!-- Define: wizard.change.fiscal.classification -->
-    <record id="view_wizard_change_fiscal_classification" model="ir.ui.view">
+<!--     <record id="view_wizard_change_fiscal_classification" model="ir.ui.view">
         <field name="model">wizard.change.fiscal.classification</field>
         <field name="arch" type="xml">
             <form>
@@ -146,7 +146,7 @@
                 </footer>
             </form>
         </field>
-    </record>
+    </record> -->
 
     <!-- Define: wizard.account.product.fiscal.classification -->
     <record id="view_wizard_account_product_fiscal_classification" model="ir.ui.view">

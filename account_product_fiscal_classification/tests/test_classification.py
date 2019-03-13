@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright (C) 2014-Today GRAP (http://www.grap.coop)
 # @author: Sylvain LE GAL (https://twitter.com/legalsylvain)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
@@ -57,8 +56,8 @@ class Tests(TransactionCase):
         vals = {
             'name': 'Product Product Name',
             'company_id': self.main_company_id,
-            'supplier_taxes_id': [[6, 0, [self.purchase_tax_id]]],
-            'taxes_id': [[6, 0, [self.sale_tax_1_id, self.sale_tax_2_id]]],
+            'supplier_taxes_id': [(6, 0, [self.purchase_tax_id])],
+            'taxes_id': [(6, 0, [self.sale_tax_1_id, self.sale_tax_2_id])],
         }
         template = self.template_obj.create(vals)
         self.assertEqual(
@@ -66,8 +65,8 @@ class Tests(TransactionCase):
             "Recovery of Correct Taxes Group failed during creation.")
         # Set classification_2 configuration to the product
         vals = {
-            'supplier_taxes_id': [[6, 0, []]],
-            'taxes_id': [[6, 0, [self.sale_tax_2_id]]],
+            'supplier_taxes_id': [(6, 0, [])],
+            'taxes_id': [(6, 0, [self.sale_tax_2_id])],
         }
         template.write(vals)
         self.assertEqual(
@@ -81,8 +80,8 @@ class Tests(TransactionCase):
         vals = {
             'name': 'Product Product Name',
             'company_id': self.main_company_id,
-            'supplier_taxes_id': [[6, 0, [self.purchase_tax_id]]],
-            'taxes_id': [[6, 0, [self.sale_tax_1_id]]],
+            'supplier_taxes_id': [(6, 0, [self.purchase_tax_id])],
+            'taxes_id': [(6, 0, [self.sale_tax_1_id])],
         }
         count_before = self.classification_obj.search_count([])
         self.template_obj.create(vals)
@@ -98,8 +97,8 @@ class Tests(TransactionCase):
         vals = {
             'name': 'Product Product Name',
             'company_id': self.main_company_id,
-            'supplier_taxes_id': [[6, False, []]],
-            'taxes_id': [[6, False, [self.sale_tax_1_id, self.sale_tax_2_id]]],
+            'supplier_taxes_id': [(6, False, [])],
+            'taxes_id': [(6, False, [self.sale_tax_1_id, self.sale_tax_2_id])],
         }
         count_before = self.classification_obj.search_count([])
         self.template_obj.create(vals)
@@ -109,10 +108,10 @@ class Tests(TransactionCase):
             "New combination must create new Fiscal Classification.")
 
     def test_05_update_fiscal_classification(self):
-        """Test if changing a Configuration of a Fiscal Classificationchange
+        """Test if changing a Configuration of a Fiscal Classification changes
             the product."""
         tg = self.classification_obj.browse([self.classification_1_id])
-        tg.write({'sale_tax_ids': [[6, 0, [self.sale_tax_1_id]]]})
+        tg.write({'sale_tax_ids': [(6, 0, [self.sale_tax_1_id])]})
         template = self.template_obj.browse([self.template_id])[0]
         self.assertEqual(
             [

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright (C) 2014-Today GRAP (http://www.grap.coop)
 # @author: Sylvain LE GAL (https://twitter.com/legalsylvain)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
@@ -8,11 +7,11 @@ from odoo.exceptions import ValidationError
 
 
 class AccountProductFiscalClassification(models.Model):
-    """Fiscal Classification of customer and supplier taxes.
-    This classification is linked to a product to select a bundle of taxes
-     in one time."""
     _name = 'account.product.fiscal.classification'
     _inherit = 'account.product.fiscal.classification.model'
+    _description = 'Fiscal Classification of customer and supplier taxes.\
+    This classification is linked to a product to select a bundle of taxes\
+     in one time.'
 
     # Default Section
     def _default_company_id(self):
@@ -47,13 +46,13 @@ class AccountProductFiscalClassification(models.Model):
             ('type_tax_use', 'in', ['sale', 'all'])]""")
 
     # Compute Section
-    @api.one
     def _compute_product_tmpl_info(self):
-        res = self.env['product.template'].search([
-            ('fiscal_classification_id', '=', self.id), '|',
-            ('active', '=', False), ('active', '=', True)])
-        self.product_tmpl_ids = res
-        self.product_tmpl_qty = len(res)
+        for record in self:
+            res = record.env['product.template'].search([
+                ('fiscal_classification_id', '=', record.id), '|',
+                ('active', '=', False), ('active', '=', True)])
+            record.product_tmpl_ids = res
+            record.product_tmpl_qty = len(res)
 
     # Overload Section
     @api.multi
@@ -74,7 +73,7 @@ class AccountProductFiscalClassification(models.Model):
                     "You cannot delete The Fiscal Classification '%s' because"
                     " it contents %s products. Please move products"
                     " to another Fiscal Classification first.") % (
-                    fc.name, fc.product_tmpl_qty))
+                        fc.name, fc.product_tmpl_qty))
         return super(AccountProductFiscalClassification, self).unlink()
 
     # Custom Sections
@@ -95,15 +94,15 @@ class AccountProductFiscalClassification(models.Model):
                 return fc.id
 
         # create new Fiscal classification if not found
-        if len(sale_tax_ids) == 0 and len(purchase_tax_ids) == 0:
+        if not sale_tax_ids and not purchase_tax_ids:
             name = _('No taxes')
-        elif len(purchase_tax_ids) == 0:
+        elif not purchase_tax_ids:
             name = _('No Purchase Taxes - Sale Taxes: ')
             for tax in at_obj.browse(sale_tax_ids):
                 name += tax.description and tax.description or tax.name
                 name += ' + '
             name = name[:-3]
-        elif len(sale_tax_ids) == 0:
+        elif not sale_tax_ids:
             name = _('Purchase Taxes: ')
             for tax in at_obj.browse(purchase_tax_ids):
                 name += tax.description and tax.description or tax.name
