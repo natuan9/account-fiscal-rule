@@ -13,7 +13,7 @@
     'license': 'AGPL-3',
     'depends': [
         'account',
-        'l10n_generic_coa',
+        # 'l10n_generic_coa',
     ],
     'data': [
         'security/ir_rule.xml',
