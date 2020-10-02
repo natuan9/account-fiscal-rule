@@ -47,7 +47,6 @@ class AccountProductFiscalClassificationTemplate(models.Model):
         ", the user should be member to this group, to use this fiscal"
         " classification when creating or updating products")
 
-    @api.multi
     def _prepare_fiscal_classification(self, company, taxes_ref):
         """ Prepare fiscal classification values
             :param company: company the wizard is running for

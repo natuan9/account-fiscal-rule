@@ -7,7 +7,7 @@ from lxml import etree
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
-from odoo.osv.orm import setup_modifiers
+from odoo.addons.base.models import ir_ui_view
 
 
 class ProductTemplate(models.Model):
@@ -30,7 +30,6 @@ class ProductTemplate(models.Model):
         res.write_taxes_setting(vals)
         return res
 
-    @api.multi
     def write(self, vals):
         res = super(ProductTemplate, self).write(vals)
         self._check_access_fiscal_classification(vals)
@@ -38,7 +37,6 @@ class ProductTemplate(models.Model):
         return res
 
     # Constraint Section
-    @api.multi
     @api.constrains('fiscal_classification_id', 'categ_id')
     def _check_classification_categ(self):
         for template in self:
@@ -72,6 +70,15 @@ class ProductTemplate(models.Model):
                 # compatible
                 self.fiscal_classification_id = None
 
+    def setup_modifiers(self, node, field=None):
+        modifiers = {}
+        if field is not None:
+            ir_ui_view.transfer_field_to_modifiers(field, modifiers)
+        ir_ui_view.transfer_node_to_modifiers(
+            node, modifiers
+        )
+        ir_ui_view.transfer_modifiers_to_node(modifiers, node)
+
     @api.model
     def fields_view_get(self, view_id=None, view_type='form',
                         toolbar=False, submenu=False):
@@ -89,13 +96,13 @@ class ProductTemplate(models.Model):
             nodes = doc.xpath("//field[@name='fiscal_classification_id']")
             if nodes:
                 nodes[0].set('required', '1')
-                setup_modifiers(
+                # porté a la rache depuis brand !
+                self.setup_modifiers(
                     nodes[0], result['fields']['fiscal_classification_id'])
                 result['arch'] = etree.tostring(doc)
         return result
 
     # Custom Section
-    @api.multi
     def write_taxes_setting(self, vals):
         """If Fiscal Classification is defined, set the according taxes
         to the product(s); Otherwise, find the correct Fiscal classification,
@@ -127,7 +134,6 @@ class ProductTemplate(models.Model):
                 super(ProductTemplate, template.sudo()).write(
                     {'fiscal_classification_id': fc_id})
 
-    @api.multi
     def _check_access_fiscal_classification(self, vals):
         FiscalClassification =\
             self.env['account.product.fiscal.classification']

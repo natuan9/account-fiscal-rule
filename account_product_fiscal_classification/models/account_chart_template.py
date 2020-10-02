@@ -13,7 +13,6 @@ class AccountChartTemplate(models.Model):
         inverse_name='chart_template_id',
         string='Fiscal Classification Templates')
 
-    @api.multi
     def _load_template(
             self, company, code_digits=None, account_ref=None, taxes_ref=None):
         self.ensure_one()

@@ -12,7 +12,7 @@ class AccountProductFiscalClassification(models.Model):
 
     # Default Section
     def _default_company_id(self):
-        return self.env['res.users']._get_company()
+        return self.env.company.id
 
     name = fields.Char(required=True, translate=True)
 
@@ -66,7 +66,6 @@ class AccountProductFiscalClassification(models.Model):
             record.product_tmpl_qty = len(res)
 
     # Overload Section
-    @api.multi
     def write(self, vals):
         res = super(AccountProductFiscalClassification, self).write(vals)
         pt_obj = self.env['product.template']
@@ -76,7 +75,6 @@ class AccountProductFiscalClassification(models.Model):
                 pt_lst.write({'fiscal_classification_id': fc.id})
         return res
 
-    @api.multi
     def unlink(self):
         for fc in self:
             if fc.product_tmpl_qty != 0:
