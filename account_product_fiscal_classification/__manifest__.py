@@ -32,7 +32,7 @@
         'demo/product_category.xml',
         'demo/res_groups.xml',
     ],
-    'post_init_hook':
-        'create_fiscal_classification_from_product_template',
+    #'post_init_hook':
+        #'create_fiscal_classification_from_product_template',
     'installable': True,
 }
