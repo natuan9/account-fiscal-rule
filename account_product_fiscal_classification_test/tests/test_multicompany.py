@@ -12,7 +12,9 @@ class MulticompanyTests(TransactionCase):
         prd = self.env.ref(
             "account_product_fiscal_classification.product_template_all_cpnies"
         )
-        self.env.user.write({"company_id": self.env.ref("base.main_company").id})
+        self.env.user.write(
+            {"company_id": self.env.ref("base.main_company").id}
+        )
         classif1 = self.env.ref(
             "account_product_fiscal_classification.global_fiscal_classification_1"
         )
