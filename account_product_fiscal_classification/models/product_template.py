@@ -3,11 +3,12 @@
 # @author: Sylvain LE GAL (https://twitter.com/legalsylvain)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+import json
+
 from lxml import etree
 
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
-from odoo.osv.orm import setup_modifiers
 
 
 class ProductTemplate(models.Model):
@@ -32,7 +33,6 @@ class ProductTemplate(models.Model):
         res.write_taxes_setting(vals)
         return res
 
-    @api.multi
     def write(self, vals):
         res = super(ProductTemplate, self).write(vals)
         self._check_access_fiscal_classification(vals)
@@ -40,7 +40,6 @@ class ProductTemplate(models.Model):
         return res
 
     # Constraint Section
-    @api.multi
     @api.constrains("fiscal_classification_id", "categ_id")
     def _check_classification_categ(self):
         for template in self:
@@ -107,14 +106,13 @@ class ProductTemplate(models.Model):
             nodes = doc.xpath("//field[@name='fiscal_classification_id']")
             if nodes:
                 nodes[0].set("required", "1")
-                setup_modifiers(
-                    nodes[0], result["fields"]["fiscal_classification_id"]
-                )
+                modifiers = json.loads(nodes[0].get("modifiers"))
+                modifiers['required'] = True
+                nodes[0].set("modifiers", json.dumps(modifiers))
                 result["arch"] = etree.tostring(doc)
         return result
 
     # Custom Section
-    @api.multi
     def write_taxes_setting(self, vals):
         """If Fiscal Classification is defined, set the according taxes
         to the product(s); Otherwise, find the correct Fiscal classification,
@@ -163,7 +161,6 @@ class ProductTemplate(models.Model):
                     {"fiscal_classification_id": fc_id}
                 )
 
-    @api.multi
     def _check_access_fiscal_classification(self, vals):
         FiscalClassification = self.env[
             "account.product.fiscal.classification"

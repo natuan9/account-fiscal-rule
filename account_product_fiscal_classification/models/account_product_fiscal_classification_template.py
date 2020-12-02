@@ -31,7 +31,6 @@ class AccountProductFiscalClassificationTemplate(models.Model):
         column1="fiscal_classification_id",
         column2="tax_id",
         string="Purchase Taxes",
-        oldname="purchase_base_tax_ids",
         domain="["
         "('type_tax_use', 'in', ['purchase', 'all']),"
         "('chart_template_id', '=', chart_template_id),"
@@ -44,7 +43,6 @@ class AccountProductFiscalClassificationTemplate(models.Model):
         column1="fiscal_classification_id",
         column2="tax_id",
         string="Sale Taxes",
-        oldname="sale_base_tax_ids",
         domain="["
         "('type_tax_use', 'in', ['sale', 'all']),"
         "('chart_template_id', '=', chart_template_id),"
@@ -59,7 +57,6 @@ class AccountProductFiscalClassificationTemplate(models.Model):
         " classification when creating or updating products",
     )
 
-    @api.multi
     def _prepare_fiscal_classification(self, company, taxes_ref):
         """Prepare fiscal classification values
         :param company: company the wizard is running for

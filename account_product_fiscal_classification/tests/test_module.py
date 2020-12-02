@@ -186,4 +186,4 @@ class Tests(TransactionCase):
                     "fiscal_classification_id": self.classification_1.id,
                 }
             )
-        self.ProductTemplate.sudo(user).create(vals)
+        self.ProductTemplate.with_user(user).create(vals)
