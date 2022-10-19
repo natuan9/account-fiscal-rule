@@ -1,0 +1,1 @@
+git+https://github.com/legalsylvain/account-financial-tools@16.0-mig-account_usability#subdirectory=setup/account_usability
