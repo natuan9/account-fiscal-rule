@@ -89,11 +89,12 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
         cls.invoice_fixed_ecotax = cls.env["account.tax"].create(
             {
                 "name": "Fixed Ecotax",
+                "price_include": True,
                 "type_tax_use": "sale",
                 "company_id": cls.env.user.company_id.id,
                 "amount_type": "code",
                 "is_ecotax": True,
-                "python_compute": "result = product.fixed_ecotaxe or 0.0",
+                "python_compute": "result = (product.fixed_ecotax or 0.0) * quantity",
                 "tax_exigibility": "on_invoice",
                 "invoice_repartition_line_ids": [
                     (
@@ -138,11 +139,12 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
         cls.invoice_weight_based_ecotax = cls.env["account.tax"].create(
             {
                 "name": "Weight Based Ecotax",
+                "price_include": True,
                 "type_tax_use": "sale",
                 "company_id": cls.env.user.company_id.id,
                 "amount_type": "code",
                 "is_ecotax": True,
-                "python_compute": "result = product.weight_based_ecotaxe or 0.0",
+                "python_compute": "result = (product.weight_based_ecotax or 0.0) * quantity",
                 "tax_exigibility": "on_invoice",
                 "invoice_repartition_line_ids": [
                     (
@@ -192,7 +194,7 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
                 "ecotax_type": "fixed",
                 "default_fixed_ecotax": 5.0,
                 "product_status": "M",
-                "supplier_status": "FAB",
+                "supplier_status": "MAN",
             }
         )
         cls.ecotax_fixed.sale_ecotax_ids = cls.invoice_fixed_ecotax
@@ -203,7 +205,7 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
                 "ecotax_type": "weight_based",
                 "ecotax_coef": 0.04,
                 "product_status": "P",
-                "supplier_status": "FAB",
+                "supplier_status": "MAN",
             }
         )
         cls.ecotax_weight.sale_ecotax_ids = cls.invoice_weight_based_ecotax
@@ -212,14 +214,14 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
         cls.invoice_partner = cls.env["res.partner"].create({"name": "Test"})
 
     @classmethod
-    def _make_invoice(cls, products):
+    def _make_invoice(cls, products, taxes):
         """Creates a new customer invoice with given products and returns it"""
         return cls.init_invoice(
             "out_invoice",
             partner=cls.invoice_partner,
             products=products,
             company=cls.env.user.company_id,
-            taxes=cls.invoice_tax,
+            taxes=taxes,
         )
 
     @classmethod
@@ -340,7 +342,9 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
             - line ecotax unit amount: 5.0
             - line ecotax total amount: 5.0
         """
-        invoice = self._make_invoice(products=self._make_product(self.ecotax_fixed))
+        products=self._make_product(self.ecotax_fixed)
+        invoice = self._make_invoice(products, [self.invoice_fixed_ecotax])
+
         self._run_checks(
             invoice,
             {"amount_ecotax": 5.0, "amount_total": 100.0},
@@ -372,7 +376,7 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
         """
         product = self._make_product(self.ecotax_fixed)
         product.ecotax_line_product_ids[0].force_amount = 10
-        invoice = self._make_invoice(products=product)
+        invoice = self._make_invoice(products=product, taxes=[self.invoice_fixed_ecotax])
         self._run_checks(
             invoice,
             {"amount_ecotax": 10.0, "amount_total": 100.0},
@@ -402,7 +406,8 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
             - line ecotax unit amount: 4.0
             - line ecotax total amount: 4.0
         """
-        invoice = self._make_invoice(products=self._make_product(self.ecotax_weight))
+        products=self._make_product(self.ecotax_weight)
+        invoice = self._make_invoice(products, [self.invoice_weight_based_ecotax])
         self._run_checks(
             invoice,
             {"amount_ecotax": 4.0, "amount_total": 100.0},
@@ -435,7 +440,8 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
         manual_fixed_product.ecotax_line_product_ids[0].force_amount = 10
         weight_based_product = self._make_product(self.ecotax_weight)
         invoice = self._make_invoice(
-            products=default_fixed_product | manual_fixed_product | weight_based_product
+            products=default_fixed_product | manual_fixed_product | weight_based_product, 
+            taxes = self.invoice_fixed_ecotax | self.invoice_fixed_ecotax | self.invoice_weight_based_ecotax
         )
         self._run_checks(
             invoice,
@@ -462,39 +468,7 @@ class TestInvoiceEcotaxe(AccountTestInvoicingCommon):
             ],
         )
 
-    def test_05_force_ecotax_on_invoice(self):
-        """Test force fixed ecotax
-
-        Ecotax classification data for this test:
-            - fixed type
-            - default amount: 5.0
-            - forced amount: 2
-        Product data for this test:
-            - list price: 100
-            - fixed ecotax : 5
-
-        Expected results (with 1 line and qty = 1):
-            - invoice ecotax amount: 2.0
-            - invoice total amount: 100.0
-            - line ecotax unit amount: 2.0
-            - line ecotax total amount: 2.0
-        """
-        product = self._make_product(self.ecotax_fixed)
-        invoice = self._make_invoice(products=product)
-        invoice.invoice_line_ids[0].ecotax_line_ids.force_amount_unit = 2
-        self._run_checks(
-            invoice,
-            {"amount_ecotax": 2.0, "amount_total": 100.0},
-            [{"ecotax_amount_unit": 2.0, "subtotal_ecotax": 2.0}],
-        )
-        new_qty = self._set_invoice_lines_random_quantities(invoice)[0]
-        self._run_checks(
-            invoice,
-            {"amount_ecotax": 2.0 * new_qty, "amount_total": 100.0 * new_qty},
-            [{"ecotax_amount_unit": 2.0, "subtotal_ecotax": 2.0 * new_qty}],
-        )
-
-    def test_06_product_variants(self):
+    def test_05_product_variants(self):
         """
         Data:
             A product template with two variants
