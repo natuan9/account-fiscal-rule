@@ -1,0 +1,2 @@
+odoo-addon-<account_avatax_exemption> @ git+https://github.com/OCA/<repository>.git@refs/pull/<475>/head#subdirectory=<account_avatax_exemption>
+odoo-addon-<account_avatax_website_sale> @ git+https://github.com/OCA/<repository>.git@refs/pull/<467>/head#subdirectory=<account_avatax_website_sale>
