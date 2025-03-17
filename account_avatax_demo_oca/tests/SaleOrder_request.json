@@ -1,0 +1,52 @@
+{
+  "createTransactionModel": {
+    "addresses": {
+      "shipFrom": {
+        "city": "San Francisco",
+        "country": "US",
+        "line1": "250 Executive Park Blvd, Suite 3400",
+        "postalCode": "94134",
+        "region": "CA"
+      },
+      "shipTo": {
+        "city": "Pleasant Hill",
+        "country": "US",
+        "line1": "77 Santa Barbara Rd",
+        "postalCode": "94523",
+        "region": "CA"
+      }
+    },
+    "businessIdentificationNo": "US12345673",
+    "code": "S00041",
+    "commit": false,
+    "companyCode": "PA",
+    "currencyCode": "USD",
+    "customerCode": "1741247961-2-Cust-10",
+    "date": "2025-03-06",
+    "description": "S00041",
+    "entityUseCode": null,
+    "exemptionNo": null,
+    "lines": [
+      {
+        "amount": 100.0,
+        "description": "NT Product",
+        "itemCode": "ID:55",
+        "number": 68,
+        "quantity": 1.0,
+        "taxCode": "NT"
+      },
+      {
+        "amount": 33.0,
+        "description": "Taxed Product",
+        "itemCode": "E-COM12",
+        "number": 72,
+        "quantity": 1.0,
+        "taxCode": false
+      }
+    ],
+    "referenceCode": null,
+    "reportingLocationCode": null,
+    "salespersonCode": "Mitchell Admin",
+    "type": "SalesOrder"
+  }
+}
